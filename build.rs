@@ -7,7 +7,7 @@ fn main() {
 
 	for entr in entrs.flatten() {
 		let p = entr.path();
-		if p.extension().map_or(false, |s| s == "cpp") {
+		if p.extension().map_or(false, |s| s == "cc") {
 			build.file(p);
 		}
 	}

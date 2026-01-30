@@ -1,6 +1,7 @@
+#include <cstdlib>
 #include <iostream>
 
-static int PAGE_SIZE;
+static int PAGE_SIZE = -1;
 
 extern "C"
 {
@@ -14,6 +15,9 @@ extern "C"
 	int c_pinit()
 	{
 		// chuẩn bị ở đây
+		if (PAGE_SIZE < 1)
+			return 1;
+
 		return 0;
 	}
 }

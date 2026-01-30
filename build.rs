@@ -14,5 +14,7 @@ fn main() {
 
 	build.compile("peft_ffi");
 
-	println!("cargo:rerun-if-changed=src/ffi")
+	println!("cargo:rerun-if-changed=src/ffi");
+	println!("cargo:rustc-link-lib=curl");
+	println!("cargo:rustc-link-lib=stdc++");
 }

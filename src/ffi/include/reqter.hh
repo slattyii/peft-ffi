@@ -2,6 +2,7 @@
 #define REQTER_H
 
 #include <curl/curl.h>
+#include <curl/easy.h>
 
 struct reqponse_t
 {

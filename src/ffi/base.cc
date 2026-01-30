@@ -1,8 +1,6 @@
 #include "include/reqter.hh"
 
 #include <cstdlib>
-#include <curl/curl.h>
-#include <curl/easy.h>
 
 static int PAGE_SIZE = -1;
 

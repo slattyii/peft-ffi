@@ -31,6 +31,7 @@ int reqter_prepare(struct reqponse_t* retp, const char* url)
 {
 	std::string ret;
 
+	curl_easy_reset(curlp);
 	curl_easy_setopt(curlp, CURLOPT_URL, url);
 	curl_easy_setopt(curlp, CURLOPT_WRITEFUNCTION, write_callback);
 	curl_easy_setopt(curlp, CURLOPT_WRITEDATA, &ret);

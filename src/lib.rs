@@ -18,15 +18,12 @@ mod tests {
 			panic!("C-side init fail");
 		};
 
-		let ret = unsafe {
-			req_get(CString::new("https://api.openai.com/").unwrap().as_ptr())
-		};
+		let urlp = CString::new("https://api.simsimi.vn/v1/simtalk").unwrap();
+		let qryp = CString::new("text=hello+world").unwrap();
+
+		let ret = unsafe { req_get(urlp.as_ptr(), qryp.as_ptr()) };
 		if ret.is_null() {
 			println!("got null pointer");
-
-			unsafe {
-				req_free(ret as *mut c_void);
-			};
 			return;
 		};
 

@@ -32,10 +32,12 @@ extern "C"
 
 extern "C"
 {
-	const char* req_get(const char* url)
+	const char* req_get(const char* url, const char* query)
 	{
+		struct request_t req = {.rq_med = REQUEST_GET, .rq_query = query};
+
 		struct reqponse_t ret;
-		if (!(reqter_prepare(&ret, url) == 0))
+		if (!(reqter_send(&req, &ret, url) == 0))
 			return nullptr;
 
 		return ret.s_data;

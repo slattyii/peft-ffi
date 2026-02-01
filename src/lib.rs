@@ -5,7 +5,10 @@ pub use ffi::*;
 
 #[cfg(test)]
 mod tests {
-	use std::ffi::{CStr, CString, c_void};
+	use std::{
+		ffi::{CStr, CString, c_void},
+		thread,
+	};
 
 	use crate::*;
 
@@ -18,22 +21,35 @@ mod tests {
 			panic!("C-side init fail");
 		};
 
-		let urlp = CString::new("https://api.simsimi.vn/v1/simtalk").unwrap();
-		let qryp = CString::new("text=hello+world").unwrap();
+		let mut threads = Vec::new();
 
-		let ret = unsafe { req_get(urlp.as_ptr(), qryp.as_ptr()) };
-		if ret.is_null() {
-			println!("got null pointer");
-			return;
-		};
+		for idx in 0..100 {
+			let th = thread::spawn(move || {
+				let urlp = CString::new("http://localhost:3000").unwrap();
+				// let qryp = CString::new("text=hello+world").unwrap();
+				let qryp = std::ptr::null();
 
-		let str = unsafe { CStr::from_ptr(ret) }.to_string_lossy().to_string();
+				let ret = unsafe { req_get(urlp.as_ptr(), qryp) };
+				if ret.is_null() {
+					println!("got null pointer");
+					return;
+				};
 
-		unsafe {
-			req_free(ret as *mut c_void);
-		};
+				let _ = unsafe { CStr::from_ptr(ret) }.to_string_lossy().to_string();
 
-		println!("request response data: {}", str);
+				unsafe {
+					req_free(ret as *mut c_void);
+				};
+
+				println!("thread {idx} request response data");
+			});
+
+			threads.push(th);
+		}
+
+		for th in threads {
+			th.join().ok();
+		}
 
 		unsafe {
 			c_pexit();

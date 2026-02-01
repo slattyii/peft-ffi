@@ -7,22 +7,16 @@
 #include <curl/easy.h>
 #include <string>
 
-static CURL* curlp = nullptr;
-
 int reqter_init()
 {
 	if (!(curl_global_init(CURL_GLOBAL_DEFAULT) == 0))
 		return 1;
-	curlp = curl_easy_init();
-	if (!(curlp))
-		return 2;
 
 	return 0;
 }
 
 void reqter_exit()
 {
-	curl_easy_cleanup(curlp);
 	curl_global_cleanup();
 }
 
@@ -40,7 +34,7 @@ int reqter_prepare(
 {
 	std::string ret;
 
-	CURL* curl = curl_easy_duphandle(curlp);
+	CURL* curl = curl_easy_init();
 	curl_easy_reset(curl);
 
 	if (!(reqp->rq_query == nullptr))
